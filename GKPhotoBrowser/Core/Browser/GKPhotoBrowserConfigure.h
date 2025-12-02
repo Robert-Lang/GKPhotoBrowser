@@ -219,6 +219,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 如果设置为YES，则视图放入重用池时会调用GKWebImageProtocol协议的clearMemoryForURL:方法
 @property (nonatomic, assign) BOOL isClearMemoryWhenViewReuse;
 
+@property(nonatomic, copy) UIImage * (^imageModifierBlock)(UIImage * targetImage);
+
 #pragma mark - 视频相关
 /// 视频播放处理
 @property (nonatomic, strong, readonly) id<GKVideoPlayerProtocol> player;

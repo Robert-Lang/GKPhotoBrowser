@@ -170,6 +170,12 @@
         // 自定义cover
         [configure setupCoverProtocol:GKWBCoverView.new];
         
+        __weak __typeof(self)weakSelf = self;
+        configure.imageModifierBlock = ^UIImage * _Nonnull(UIImage * _Nonnull targetImage) {
+            
+            return [weakSelf addWatermark:targetImage];
+        };
+        
         GKPhotoBrowser *browser = [GKPhotoBrowser photoBrowserWithPhotos:photos currentIndex:index];
         browser.configure = configure;
         browser.delegate = self;
@@ -179,6 +185,49 @@
     };
     return cell;
 }
+- (UIImage *)addWatermark:(UIImage *)image {
+    if (!image) return nil;
+
+    CGSize imageSize = image.size;
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, image.scale);
+
+    // 1️⃣ 绘制原图
+    [image drawAtPoint:CGPointZero];
+
+    // 2️⃣ 设置水印内容
+    NSString *watermark = @"© Your Watermark";
+
+    // 3️⃣ 根据图片大小自适应字体大小（宽度的 5% 作为字体大小）
+    CGFloat fontSize = imageSize.width * 0.05;
+    UIFont *font = [UIFont boldSystemFontOfSize:fontSize];
+
+    // 4️⃣ 设置颜色和透明度
+    NSDictionary *attrs = @{
+        NSFontAttributeName: font,
+        NSForegroundColorAttributeName: [[UIColor whiteColor] colorWithAlphaComponent:0.4]
+    };
+
+    // 5️⃣ 计算文字尺寸
+    CGSize textSize = [watermark sizeWithAttributes:attrs];
+
+    // 6️⃣ 设置水印位置（右下角，边距为图片宽高的 2%）
+    CGFloat marginX = imageSize.width * 0.02;
+    CGFloat marginY = imageSize.height * 0.02;
+    CGRect rect = CGRectMake(imageSize.width - textSize.width - marginX,
+                             imageSize.height - textSize.height - marginY,
+                             textSize.width,
+                             textSize.height);
+
+    // 7️⃣ 绘制水印
+    [watermark drawInRect:rect withAttributes:attrs];
+
+    // 8️⃣ 获取结果图片
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return result;
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     GKTimeLineFrame *f = self.dataFrames[indexPath.row];

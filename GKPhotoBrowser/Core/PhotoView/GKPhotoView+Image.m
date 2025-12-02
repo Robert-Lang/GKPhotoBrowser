@@ -226,7 +226,15 @@
                     
                     self.scrollView.scrollEnabled = YES;
                     [self.loadingView stopLoading];
+                                        
+                    /// 图片处理
+                    if (self.configure.imageModifierBlock && !photo.isLivePhoto && !photo.isVideo) {
+                        self.imageView.image = self.configure.imageModifierBlock(image);
+                    }else {
+                        self.imageView.image = image;
+                    }
                 }
+                
                 if (!isOrigin) {
                     [self adjustFrame];
                 }
@@ -362,7 +370,14 @@
 
 - (void)setupImageView:(UIImage *)image {
     self.photo.finished = YES;
-    self.imageView.image = image;
+    
+    /// 图片处理
+    if (self.configure.imageModifierBlock) {
+        self.imageView.image = self.configure.imageModifierBlock(image);
+    }else {
+        self.imageView.image = image;
+    }
+    
     self.scrollView.scrollEnabled = YES;
     [self.loadingView stopLoading];
     [self.loadingView hideFailure];
