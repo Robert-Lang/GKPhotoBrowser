@@ -173,6 +173,7 @@
         CGFloat w = 64;
         CGFloat h = 20;
                 
+        self.liveMarkView.frame = CGRectMake(x, y, w, h);
         if (self.imageView.frame.size.height > (self.frame.size.height - kSafeTopSpace - kSafeBottomSpace)) {
             CGPoint center = self.liveMarkView.center;
             center.y = (KIsiPhoneX && !self.livePhoto.browser.isLandscape) ? (kSafeTopSpace + 10) : 30;
