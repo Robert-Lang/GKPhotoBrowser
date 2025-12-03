@@ -13,7 +13,6 @@
 @property (nonatomic, strong) UIImageView *liveImgView;
 
 @property (nonatomic, strong) UILabel *liveLabel;
-
 @end
 
 @implementation GKLivePhotoMarkView
@@ -32,6 +31,8 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    self.layer.cornerRadius = self.liveImgView.frame.size.height / 2;
     
     CGRect frame = self.liveImgView.frame;
     frame.origin.x = 5;
@@ -171,8 +172,7 @@
         CGFloat y = CGRectGetMinY(self.imageView.frame) + 10;
         CGFloat w = 64;
         CGFloat h = 20;
-        self.liveMarkView.frame = CGRectMake(x, y, w, h);
-        
+                
         if (self.imageView.frame.size.height > (self.frame.size.height - kSafeTopSpace - kSafeBottomSpace)) {
             CGPoint center = self.liveMarkView.center;
             center.y = (KIsiPhoneX && !self.livePhoto.browser.isLandscape) ? (kSafeTopSpace + 10) : 30;
