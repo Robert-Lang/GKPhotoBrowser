@@ -229,10 +229,11 @@
                                         
                     /// 图片处理
                     if (self.configure.imageModifierBlock && !photo.isLivePhoto && !photo.isVideo) {
-                        self.imageView.image = self.configure.imageModifierBlock(image);
+                        self.imageView.image = photo.image = self.configure.imageModifierBlock(image);
                     }else {
-                        self.imageView.image = image;
+                        self.imageView.image = photo.image = image;
                     }
+            
                 }
                 
                 if (!isOrigin) {
